@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 const About = () => {
   useGSAP(() => {
     // Mask expand animation with video
-    let tl = gsap.timeline({
+    const tl = gsap.timeline({
       scrollTrigger: {
         trigger: "#clip",
         start: "top center",
@@ -32,21 +32,16 @@ const About = () => {
     );
 
     // Text word-by-word fade-in animation
-    const headingWords = gsap.utils.toArray("#about-heading span");
-    headingWords.forEach((word, index) => {
+    const headingWords = gsap.utils.toArray<HTMLElement>("#about-heading span");
+    headingWords.forEach((word) => {
       gsap.fromTo(
         word,
         { opacity: 0 },
         {
           opacity: 1,
-          duration: 0.5,
-          delay: index * 0.3,
+          duration: 0.6,
+          stagger: 0.1,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: "#about-heading",
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
         }
       );
     });
@@ -58,10 +53,7 @@ const About = () => {
       className="relative min-h-screen w-screen text-white overflow-hidden pt-16"
     >
       {/* Scroll Animation with Video and Text Overlay */}
-      <div
-        className="h-[100vh] w-screen relative z-10"
-        id="clip"
-      >
+      <div className="h-[100vh] w-screen relative z-10" id="clip">
         <div className="mask-clip-path relative mx-auto w-[300px] h-[300px] rounded-[50%] overflow-hidden">
           {/* Single Video inside mask */}
           <video
@@ -73,13 +65,22 @@ const About = () => {
           >
             <source src="/videos/earth-rotate.mp4" type="video/mp4" />
           </video>
+
           {/* Text at Top Center */}
           <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-20 text-center w-[min(1200px,92%)]">
             <h1
               id="about-heading"
               className="text-4xl md:text-6xl font-extrabold leading-tight"
             >
-              {["A", "truly", "global", "network", "for", "lightning-fast", "inference"].map((word, index) => (
+              {[
+                "A",
+                "truly",
+                "global",
+                "network",
+                "for",
+                "lightning-fast",
+                "inference",
+              ].map((word, index) => (
                 <span key={index} className="inline-block mr-2 last:mr-0">
                   {word}
                 </span>
@@ -89,8 +90,8 @@ const About = () => {
               id="about-sub"
               className="mt-6 text-white/80 text-lg md:text-xl max-w-prose"
             >
-              Our edge network spans 160+ locations—bringing compute closer to your
-              users for blazing-fast experiences.
+              Our edge network spans 160+ locations—bringing compute closer to
+              your users for blazing-fast experiences.
             </p>
           </div>
         </div>

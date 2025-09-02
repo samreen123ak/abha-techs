@@ -16,9 +16,9 @@ const navItems = [
 ];
 
 const Navbar = () => {
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
   const [isNavVisible, setIsNavVisible] = useState(true);
-  const navContainerRef = useRef(null);
+  const navContainerRef = useRef<HTMLDivElement | null>(null);
   const { y: currentScrollY } = useWindowScroll();
   const pathname = usePathname();
 
@@ -31,16 +31,16 @@ const Navbar = () => {
       navElement.style.background = "rgba(0,0,0,0.3)";
       navElement.style.backdropFilter = "blur(10px)";
       navElement.style.border = "none";
-    } else if (currentScrollY > lastScrollY) {
+    } else if (currentScrollY > lastScrollYRef.current) {
       setIsNavVisible(false); // hide on scroll down
-    } else if (currentScrollY < lastScrollY) {
+    } else if (currentScrollY < lastScrollYRef.current) {
       setIsNavVisible(true); // show on scroll up
       navElement.style.background = "rgba(0,0,0,0.7)";
       navElement.style.backdropFilter = "blur(16px)";
       navElement.style.border = "1px solid rgba(255,255,255,0.15)";
     }
 
-    setLastScrollY(currentScrollY);
+    lastScrollYRef.current = currentScrollY;
   }, [currentScrollY]);
 
   useEffect(() => {
